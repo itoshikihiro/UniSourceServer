@@ -33,7 +33,6 @@ public class User {
 	protected int userID;//email will be used
 	protected String username;//the actual name will be used
 	protected String password;
-	protected String description;
 	protected int roleID;
 	
 	//regular constructor
@@ -47,16 +46,14 @@ public class User {
 	 * @param userID
 	 * @param username
 	 * @param password
-	 * @param description
 	 * @param roleID
 	 */
 	public User(int userID, String username, String password,
-			String description, int roleID) {
+			int roleID) {
 		super();
 		this.userID = userID;
 		this.username = username;
 		this.password = password;
-		this.description = description;
 		this.roleID = roleID;
 	}
 
@@ -103,20 +100,6 @@ public class User {
 	}
 
 	/**
-	 * @return the description
-	 */
-	public String getDescription() {
-		return description;
-	}
-
-	/**
-	 * @param description the description to set
-	 */
-	public void setDescription(String description) {
-		this.description = description;
-	}
-
-	/**
 	 * @return the roleID
 	 */
 	public int getRoleID() {
@@ -143,8 +126,7 @@ public class User {
 	@Override
 	public String toString() {
 		return "User [userID=" + userID + ", username=" + username
-				+ ", password=" + password + ", description=" + description
-				+ ", roleID=" + roleID + "]";
+				+ ", password=" + password + ", roleID=" + roleID + "]";
 	}
 	
 	

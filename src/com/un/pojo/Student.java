@@ -34,6 +34,7 @@ public class Student extends User {
 	
 	private int graduateYear;
 	private int age;
+	private String description;
 
 	//regular constructor
 	public Student(){}
@@ -51,7 +52,7 @@ public class Student extends User {
 	 */
 	public Student(int userID, String username, String password,
 			String description, int roleID, int graduateYear, int age) {
-		super(userID, username, password, description, roleID);
+		super(userID, username, password, roleID);
 		this.graduateYear = graduateYear;
 		this.age = age;
 	}
