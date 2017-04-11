@@ -42,6 +42,9 @@ public class UnServer extends ServerSocket {
 		}
 	}
 
-
+	@SuppressWarnings("resource")
+	public static void main(String[] args) throws IOException {
+		new UnServer();
+	}
 }
 

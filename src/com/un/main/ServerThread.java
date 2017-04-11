@@ -43,19 +43,24 @@ public class ServerThread extends Thread {
 	public void run() {
 		try {
 			String line = bufferedReader.readLine();
-
+			//a test method
+			System.out.println("Client(" + getName() + ") say: " + line);
+			
+			//a test method if client says bye, disconnect
 			while (!line.equals("bye")) {
 				printWriter.println("continue, Client(" + getName() + ")!");
 				line = bufferedReader.readLine();
 				System.out.println("Client(" + getName() + ") say: " + line);
 			}
 			printWriter.println("bye, Client(" + getName() + ")!");
-
 			System.out.println("Client(" + getName() + ") exit!");
 			printWriter.close();
 			bufferedReader.close();
 			client.close();
+			
+			
 		} catch (IOException e) {
+			System.out.println("Client(" + getName() + ") connects error"+e);
 		}
 	}
 }
