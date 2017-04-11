@@ -17,8 +17,8 @@ package com.un.pojo;
     *  we don't not contain any setters here, since the object will be init with data
     */
 public class Message {
-	private int taskCode;
-	private boolean flag;
+	private int taskCode; //this determines which function it will go to. For example, if code == 1, it will go to user login function 
+	private boolean flag; //false represents there is no data. true represents there contains data. 
 	private Object object;
 	/** 
 	* <p>Title: Message</p> 
