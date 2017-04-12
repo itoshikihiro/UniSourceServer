@@ -27,6 +27,11 @@ public class ServerThread extends Thread {
 	private BufferedReader bufferedReader;
 	//send to client
 	private PrintWriter printWriter;
+	//get object from client
+	
+	//send object to client
+	
+	
 	
 	public ServerThread(Socket s) throws IOException{
 		client = s;
