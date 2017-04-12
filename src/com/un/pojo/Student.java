@@ -50,11 +50,12 @@ public class Student extends User {
 	 * @param description
 	 * @param roleID
 	 */
-	public Student(int userID, String username, String password,
-			String description, int roleID, int graduateYear, int age) {
+	public Student(String userID, String username, String password, int roleID, int graduateYear, int age,
+			String description) {
 		super(userID, username, password, roleID);
 		this.graduateYear = graduateYear;
 		this.age = age;
+		this.description = description;
 	}
 
 	/**
@@ -83,6 +84,19 @@ public class Student extends User {
 	 */
 	public void setAge(int age) {
 		this.age = age;
+	}
+	/** 
+	* @return description 
+	*/
+	public String getDescription() {
+		return description;
+	}
+
+	/**
+	 * @param description the description to set
+	 */
+	public void setDescription(String description) {
+		this.description = description;
 	}
 
 	/* (non Javadoc)

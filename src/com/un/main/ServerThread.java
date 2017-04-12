@@ -40,6 +40,7 @@ public class ServerThread extends Thread {
 	}
 	
 	//the actual running method for multi thread
+	@Override
 	public void run() {
 		try {
 			String line = bufferedReader.readLine();

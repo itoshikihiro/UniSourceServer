@@ -30,7 +30,7 @@ package com.un.pojo;
 
  */
 public class User {
-	protected int userID;//email will be used
+	protected String userID;//email will be used
 	protected String username;//the actual name will be used
 	protected String password;
 	protected int roleID;
@@ -48,7 +48,7 @@ public class User {
 	 * @param password
 	 * @param roleID
 	 */
-	public User(int userID, String username, String password,
+	public User(String userID, String username, String password,
 			int roleID) {
 		super();
 		this.userID = userID;
@@ -60,14 +60,14 @@ public class User {
 	/**
 	 * @return the userID
 	 */
-	public int getUserID() {
+	public String getUserID() {
 		return userID;
 	}
 
 	/**
 	 * @param userID the userID to set
 	 */
-	public void setUserID(int userID) {
+	public void setUserID(String userID) {
 		this.userID = userID;
 	}
 
