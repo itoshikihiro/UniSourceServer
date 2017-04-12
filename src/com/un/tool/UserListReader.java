@@ -123,5 +123,14 @@ public class UserListReader {
 		}
 		return rev;
 	}
+	
+	public HashMap<String,String> getNameAndPass(ArrayList<?> list){
+		HashMap<String, String> rev = new HashMap<String,String>();
+		for(Object o:list){
+			User u = (User) o;
+			rev.put(u.getUserID(), u.getPassword());
+		}
+		return rev;
+	}
 }
 

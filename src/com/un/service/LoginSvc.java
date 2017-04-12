@@ -17,9 +17,7 @@ package com.un.service;
     *  
     */
 public interface LoginSvc {
-	//check if the userID exits in this system
-	public boolean checkUser(String userID);
 	//check if the userID matches the user's password
-	public boolean validUser(String userID, String password);
+	public boolean validUser(int roleID, String userID, String password);
 }
 
