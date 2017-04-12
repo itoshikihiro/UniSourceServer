@@ -59,7 +59,6 @@ public class ServerThread extends Thread {
 			bufferedReader.close();
 			client.close();
 			
-			
 		} catch (IOException e) {
 			System.out.println("Client(" + getName() + ") connects error"+e);
 		}
