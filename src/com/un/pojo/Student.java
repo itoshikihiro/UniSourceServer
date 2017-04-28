@@ -32,6 +32,10 @@ package com.un.pojo;
 public class Student extends User {
 
 	
+	    /** 
+	    * @Fields serialVersionUID : TODO
+	    */  
+	private static final long serialVersionUID = 1L;
 	private int graduateYear;
 	private int age;
 	private String description;

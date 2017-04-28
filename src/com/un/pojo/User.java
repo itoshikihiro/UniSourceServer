@@ -19,6 +19,8 @@
  */
 package com.un.pojo;
 
+import java.io.Serializable;
+
 /**
  * @ClassName: User
 
@@ -29,7 +31,11 @@ package com.un.pojo;
  * @date: Apr 10, 2017 3:38:16 PM
 
  */
-public class User {
+public class User implements Serializable{
+	    /** 
+	    * @Fields serialVersionUID : TODO
+	    */  
+	private static final long serialVersionUID = 1L;
 	protected String userID;//email will be used
 	protected String username;//the actual name will be used
 	protected String password;

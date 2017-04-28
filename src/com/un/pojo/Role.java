@@ -19,6 +19,8 @@
  */
 package com.un.pojo;
 
+import java.io.Serializable;
+
 /**
  * @ClassName: Role
 
@@ -29,7 +31,11 @@ package com.un.pojo;
  * @date: Apr 10, 2017 3:41:42 PM
 
  */
-public class Role {
+public class Role implements Serializable{
+	    /** 
+	    * @Fields serialVersionUID : TODO
+	    */  
+	private static final long serialVersionUID = 1L;
 	private int ID;
 	private String roleName;
 	/**
