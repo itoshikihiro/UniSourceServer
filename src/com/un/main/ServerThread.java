@@ -8,11 +8,13 @@
     */  
 package com.un.main;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
+import java.io.BufferedInputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.net.Socket;
+
+import com.un.service.TaskDispatchSvc;
+import com.un.service.impl.TaskDispatcherImpl;
 
 /** 
 * @ClassName: ServerThread 
@@ -22,21 +24,30 @@ import java.net.Socket;
 *  
 */
 public class ServerThread extends Thread {
-	private Socket client;
-	//get message from client
+	private Socket client=null;
+	/*//get message from client
 	private BufferedReader bufferedReader;
-	//send to client
-	private PrintWriter printWriter;
+	private PrintWriter printWriter;*/
 	//get object from client
-	
+	private ObjectInputStream objectReader=null;
 	//send object to client
+	private ObjectOutputStream objectWriter=null;
+	private TaskDispatchSvc TDI=null;
 	
 	
-	
-	public ServerThread(Socket s) throws IOException{
+	public ServerThread(Socket s){
 		client = s;
-		bufferedReader = new BufferedReader(new InputStreamReader(client.getInputStream()));
-		printWriter = new PrintWriter(client.getOutputStream(), true);
+		//initializing all private objects
+		/*bufferedReader = new BufferedReader(new InputStreamReader(client.getInputStream()));
+		printWriter = new PrintWriter(client.getOutputStream(), true);*/
+		try{
+			//the sequence of initialization does matter
+			objectWriter = new ObjectOutputStream(client.getOutputStream());
+			objectReader = new ObjectInputStream(new BufferedInputStream(client.getInputStream()));
+		}catch(Exception e){
+			System.out.println("Initialization error");
+		}
+		TDI = new TaskDispatcherImpl(client,objectReader,objectWriter);
 		
 		//print on server console about which client is getting the connection
 		System.out.println("Client(" + getName() + ") come in...");
@@ -48,24 +59,33 @@ public class ServerThread extends Thread {
 	@Override
 	public void run() {
 		try {
-			String line = bufferedReader.readLine();
-			//a test method
-			System.out.println("Client(" + getName() + ") say: " + line);
-			
+			/*String line = bufferedReader.readLine();
 			//a test method if client says bye, disconnect
 			while (!line.equals("bye")) {
-				printWriter.println("continue, Client(" + getName() + ")!");
-				line = bufferedReader.readLine();
+				printWriter.println("continue, Client(" + getName() + ")! bye");
 				System.out.println("Client(" + getName() + ") say: " + line);
+				line = bufferedReader.readLine();
 			}
 			printWriter.println("bye, Client(" + getName() + ")!");
 			System.out.println("Client(" + getName() + ") exit!");
 			printWriter.close();
-			bufferedReader.close();
-			client.close();
+			bufferedReader.close();*/
 			
-		} catch (IOException e) {
-			System.out.println("Client(" + getName() + ") connects error"+e);
+			
+			//a test method
+			//System.out.println("Client(" + getName() + ") logged in");
+			
+			
+			//read object from client
+				TDI.dispatch();
+			
+			
+			objectReader.close();
+			objectWriter.close();
+			client.close();
+			System.out.println("Client(" + getName() + ") disconnected...");
+		} catch (Exception e) {
+			System.out.println("Client(" + getName() + ")'s connection lost");
 		}
 	}
 }
