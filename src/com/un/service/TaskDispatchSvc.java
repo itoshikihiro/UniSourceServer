@@ -8,6 +8,8 @@
     */  
 package com.un.service;
 
+import java.io.IOException;
+
 import com.un.pojo.Message;
 
 /** 
@@ -18,6 +20,10 @@ import com.un.pojo.Message;
     *  
     */
 public interface TaskDispatchSvc {
-	public void dispath(Message m);
+	public void dispatch(Message m);
+	public void returnErrorMes();
+	public void loginCheck(Message m) throws IOException;
+	public void returnMes(Message m) throws IOException;
+	
 }
 

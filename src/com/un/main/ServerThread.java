@@ -13,6 +13,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 
+import com.un.pojo.Message;
 import com.un.service.TaskDispatchSvc;
 import com.un.service.impl.TaskDispatcherImpl;
 
@@ -41,13 +42,15 @@ public class ServerThread extends Thread {
 		/*bufferedReader = new BufferedReader(new InputStreamReader(client.getInputStream()));
 		printWriter = new PrintWriter(client.getOutputStream(), true);*/
 		try{
+			//client.setSoTimeout(60000);
 			//the sequence of initialization does matter
 			objectWriter = new ObjectOutputStream(client.getOutputStream());
 			objectReader = new ObjectInputStream(new BufferedInputStream(client.getInputStream()));
 		}catch(Exception e){
 			System.out.println("Initialization error");
 		}
-		TDI = new TaskDispatcherImpl(client,objectReader,objectWriter);
+		//initialize the task dispatcher interface
+		TDI = new TaskDispatcherImpl(client,objectWriter);
 		
 		//print on server console about which client is getting the connection
 		System.out.println("Client(" + getName() + ") come in...");
@@ -59,27 +62,15 @@ public class ServerThread extends Thread {
 	@Override
 	public void run() {
 		try {
-			/*String line = bufferedReader.readLine();
-			//a test method if client says bye, disconnect
-			while (!line.equals("bye")) {
-				printWriter.println("continue, Client(" + getName() + ")! bye");
-				System.out.println("Client(" + getName() + ") say: " + line);
-				line = bufferedReader.readLine();
-			}
-			printWriter.println("bye, Client(" + getName() + ")!");
-			System.out.println("Client(" + getName() + ") exit!");
-			printWriter.close();
-			bufferedReader.close();*/
-			
-			
-			//a test method
-			//System.out.println("Client(" + getName() + ") logged in");
-			
-			
 			//read object from client
-				TDI.dispatch();
-			
-			
+			Object obj = objectReader.readObject();
+			Message mes = (Message) obj;//convert object to Message class
+			while(mes.getTaskCode()!=-2)//while the task code is not equal to -2, it will continue to dispatch
+			{
+				TDI.dispatch(mes);
+				obj = objectReader.readObject();
+				mes = (Message) obj;
+			}
 			objectReader.close();
 			objectWriter.close();
 			client.close();

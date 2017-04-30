@@ -8,8 +8,10 @@
     */  
 package com.un.service;
 
+import com.un.pojo.Student;
+import com.un.pojo.User;
 
-    /** 
+/** 
     * @ClassName: LoginSvc 
     * @Description: the interface for login service
     * @author Jie Lin: kimihiro.lin80@gmail.com
@@ -19,5 +21,9 @@ package com.un.service;
 public interface LoginSvc {
 	//check if the userID matches the user's password
 	public boolean validUser(int roleID, String userID, String password);
+	//get user profile profile
+	public User getUserProfile(String userID);
+	//get student profile profile
+	public Student getStuProfile(String userID);
 }
 

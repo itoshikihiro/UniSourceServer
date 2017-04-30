@@ -10,6 +10,7 @@ package com.un.service.impl;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 
 import com.un.pojo.Student;
 import com.un.pojo.User;
@@ -33,9 +34,15 @@ public class LoginSvcImpl implements LoginSvc{
 	 * @return 
 	 * @see com.un.service.LoginSvc#validUser(java.lang.String, java.lang.String) 
 	 */ 
+	private UserListReader ulr = null;
+	
+	//constructor
+	public LoginSvcImpl(){
+		ulr=new UserListReader();
+	}
+	
 	@Override
 	public boolean validUser(int roleID,String userID, String password) {
-		UserListReader ulr=new UserListReader();
 		boolean rev = false;
 		HashMap<String,String> nameAndPass = new HashMap<String,String>();
 		ArrayList<Student> stuList = null;
@@ -52,20 +59,66 @@ public class LoginSvcImpl implements LoginSvc{
 			break;
 		}
 		
-		if(userList!=null){
+		if(userList!=null)
+		{
 			nameAndPass = ulr.getNameAndPass(userList);
-		}else{
+		}
+		else if(stuList != null)
+		{
 			nameAndPass = ulr.getNameAndPass(stuList);
 		}
+		else
+		{
+			return false;
+		}
 		//if there is such user in the system
-		if(nameAndPass.containsKey(userID)){
+		if(nameAndPass.containsKey(userID))
+		{
 			//if the user's password matches
-			if(nameAndPass.get(userID).matches(password)){
+			if(nameAndPass.get(userID).matches(password))
+			{
 				rev = true;
 			}
 		}
-		
 		return rev;
+	}
+
+	/* (non Javadoc) 
+	* <p>Title: getUserProfile</p> 
+	* <p>Description: </p> 
+	* @return 
+	* @see com.un.service.LoginSvc#getUserProfile() 
+	*/ 
+	@Override
+	public User getUserProfile(String userID) {
+		ArrayList<User> al = ulr.getAdminList();
+		Iterator<User> i = al.iterator();
+		while(i.hasNext()){
+			User u = i.next();
+			if(u.getUserID().equals(userID)){
+				return u;
+			}
+		}
+		return null;
+	}
+
+	/* (non Javadoc) 
+	* <p>Title: getStuProfile</p> 
+	* <p>Description: </p> 
+	* @return 
+	* @see com.un.service.LoginSvc#getStuProfile() 
+	*/ 
+	@Override
+	public Student getStuProfile(String userID) {
+		ArrayList<Student> al = ulr.getStudentList();
+		Iterator<Student> i = al.iterator();
+		while(i.hasNext()){
+			Student u = i.next();
+			if(u.getUserID().equals(userID)){
+				return u;
+			}
+		}
+		return null;
 	}
 
 }
