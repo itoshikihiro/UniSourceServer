@@ -14,7 +14,6 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.InetAddress;
 import java.net.Socket;
-import java.net.UnknownHostException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -39,33 +38,32 @@ public class EmailNotifier {
 
 	private boolean isConnected = false;
 
-	public EmailNotifier() throws IOException
+	public EmailNotifier()
 	{
 		InetAddress DestAddr = null;
 		try {
 			DestAddr = InetAddress.getByName(WEBMAILHOST);
-		} catch (UnknownHostException e) {
-			System.out.println("Unknow host: "+WEBMAILHOST);
-		}
-		connection = new Socket(DestAddr,SMTP_PORT);
-		fromServer = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-		toServer = new DataOutputStream(connection.getOutputStream());
-
-		String reply = fromServer.readLine();
-		if(parseReply(reply)!=220)
-		{
-			System.out.println("error in connecting");
-			System.out.println(reply);
+			connection = new Socket(DestAddr,SMTP_PORT);
+			fromServer = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+			toServer = new DataOutputStream(connection.getOutputStream());
+			String reply = fromServer.readLine();
+			if(parseReply(reply)!=220)
+			{
+				System.out.println("error in connecting");
+				System.out.println(reply);
+				return;
+			}
+			String localhost = (InetAddress.getLocalHost()).getHostName();
+			try {
+				sendCommand("HELO " + localhost, 250);
+			} catch (IOException e) {
+				System.out.println("Helo command fail. System aborts");
+			}
+			isConnected = true;
+		} catch (Exception e) {
+			System.out.println("error for initializing email notifier");
 			return;
 		}
-		String localhost = (InetAddress.getLocalHost()).getHostName();
-		try {
-			sendCommand("HELO " + localhost, 250);
-		} catch (IOException e) {
-			System.out.println("Helo command fail. System aborts");
-			throw e;
-		}
-		isConnected = true;
 	}
 	
 	public void send(String rcpt,String subject, String body) throws IOException
