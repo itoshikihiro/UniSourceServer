@@ -29,7 +29,7 @@ public class CourseSvcImpl implements CoursesSvc {
 
 	
 	final public static String FILEADD = "./Content/files/";
-	final public static String SUFFIX = ".csv";
+	final public static String SUFFIX = "Courses.csv";
 	/* (non Javadoc) 
 	* <p>Title: readCList</p> 
 	* <p>Description: </p> 
@@ -41,7 +41,7 @@ public class CourseSvcImpl implements CoursesSvc {
 	public ArrayList<Course> readCList(String userID) {
 		ArrayList<Course> rev = new ArrayList<Course>();
 		
-		File f = new File(FILEADD+userID+"Courses"+SUFFIX);
+		File f = new File(FILEADD+userID+SUFFIX);
 		BufferedReader reader = null;
 		try {
 			reader = new BufferedReader(new FileReader(f));
@@ -75,7 +75,7 @@ public class CourseSvcImpl implements CoursesSvc {
 		{
 			//use this constructor means if there exists such file
 			//directly add more String at the end of this file
-			 FileWriter writer=new FileWriter(FILEADD+userID+"Courses"+SUFFIX,true);
+			 FileWriter writer=new FileWriter(FILEADD+userID+SUFFIX,true);
 			 writer.write(c.getCourseCode()+","+c.getCourseName()+"\n");
 			 writer.close();
 		}
