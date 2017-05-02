@@ -39,7 +39,6 @@ public class TaskDispatcherImpl implements TaskDispatchSvc{
 	RegisterSvc registerService = null;
 	CoursesSvc courseService = null;
 	String userID = null;
-	int counter = 0;
 	ActivitySvc activityService = null;
 	
 	/** 
@@ -76,17 +75,12 @@ public class TaskDispatcherImpl implements TaskDispatchSvc{
 				case 2:
 					requestCList(m);
 					break;
-				case 3:
-					if(counter == 0)
-					{
-						recordUserID(m);
-						counter++;
-					}else
-					{
-						addNewCourse(m);
-						counter = 0;
-						userID = null;
-					}
+				case 31:
+					recordUserID(m);
+					break;
+				case 32:
+					addNewCourse(m);
+					userID = null;
 					break;
 				case 4: 
 					requestAList(m);
