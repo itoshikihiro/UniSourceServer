@@ -80,6 +80,8 @@ public class EmailNotifier {
 		sendCommand("RCPT TO:<" + rcpt + ">", 250);
 		sendCommand("DATA", 354);
 		sendCommand(sendData + CRLF + ".", 250);
+		
+		close();
 	}
 	/*
 	 * Send an SMTP command to the server. Check for reply code. Does not check

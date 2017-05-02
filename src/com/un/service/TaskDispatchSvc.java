@@ -24,6 +24,6 @@ public interface TaskDispatchSvc {
 	public void returnErrorMes();
 	public void loginCheck(Message m) throws IOException;
 	public void returnMes(Message m) throws IOException;
-	
+	public void requestRegister(Message m);
 }
 

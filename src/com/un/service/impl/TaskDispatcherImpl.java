@@ -15,6 +15,7 @@ import java.net.Socket;
 import com.un.pojo.Message;
 import com.un.pojo.User;
 import com.un.service.LoginSvc;
+import com.un.service.RegisterSvc;
 import com.un.service.TaskDispatchSvc;
 
 /** 
@@ -26,9 +27,10 @@ import com.un.service.TaskDispatchSvc;
     */
 public class TaskDispatcherImpl implements TaskDispatchSvc{
 
-	LoginSvc loginService;
-	Socket client;
-	ObjectOutputStream objectWriter;
+	LoginSvc loginService = null;
+	Socket client = null;
+	ObjectOutputStream objectWriter = null;
+	RegisterSvc registerService = null;
 	
 	/** 
 	* <p>Description: Constructor </p>  
@@ -37,6 +39,7 @@ public class TaskDispatcherImpl implements TaskDispatchSvc{
 		loginService = new LoginSvcImpl();
 		this.client = client;
 		this.objectWriter = objectWriter;
+		registerService = new RegisterSvcImpl();
 	}
 	
 	/* (non Javadoc) 
@@ -54,6 +57,9 @@ public class TaskDispatcherImpl implements TaskDispatchSvc{
 				switch (m.getTaskCode()) {
 				case 0:
 					loginCheck(m);
+					break;
+				case 1:
+					requestRegister(m);
 					break;
 				default:
 					break;
@@ -106,5 +112,21 @@ public class TaskDispatcherImpl implements TaskDispatchSvc{
 			System.out.println("Error for sending object to client");
 		}
 	}
+	
+	//to invoke the register service's function
+	public void requestRegister(Message m)
+	{
+		String s = (String)m.getObject();
+		//print the object we got from the client
+		//System.out.println(s.toString());
+		registerService.requestRegister(s);
+		try {
+			returnMes(new Message(1,"Your information has sent to one of admins, please check your email box recently. The admin will send you an email to confirm your information"));
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			System.out.println("Error for sending object to client");
+		}
+	}
+	
 }
 

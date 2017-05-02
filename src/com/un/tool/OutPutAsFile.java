@@ -10,8 +10,6 @@ package com.un.tool;
 
 import java.io.FileWriter;
 import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 /** 
     * @ClassName: FileWriter 
@@ -32,7 +30,7 @@ public class OutPutAsFile {
 			//use this constructor means if there exists such file
 			//directly add more String at the end of this file
 			 FileWriter writer=new FileWriter(FILEADD+fileName+SUFFIX,true);
-			 writer.write(data+"\n\t");
+			 writer.write(data+"\n");
 			 writer.close();
 		}
 		catch(IOException e)//if it catches any exception
