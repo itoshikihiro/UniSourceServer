@@ -96,10 +96,34 @@ public class Client {
  				}
 			}
 			
+			/** 
+			 * 
+			 * 
+			 * 
+			 * 
+			 */
+			//test new function for requestRegister
+			//the only thing we are asking is the email address
+			objectWriter.writeObject(new Message(1, "jilin@ursinus.edu"));
+			objectWriter.flush();
+			System.out.println("object has sent to server to test register process");
+			
+			obj = objectReader.readObject();
+			if(obj!=null){
+ 				Message m = (Message) obj;
+ 				if(m.getTaskCode()==-1){
+ 					System.out.println("something goes wrong");
+ 				}else{
+ 					String str = (String) m.getObject();
+ 					System.out.println(str);
+ 				}
+			}
+			
 			//shutdown the connection from the client
 			objectWriter.writeObject(new Message(-2,null));
 			objectWriter.flush();//send object to server
 			
+			//shutdown the connection
 			objectReader.close();
 			objectWriter.close();
 			socket.close();
