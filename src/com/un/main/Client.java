@@ -15,6 +15,7 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Iterator;
 
+import com.un.pojo.Activity;
 import com.un.pojo.Course;
 import com.un.pojo.Message;
 import com.un.pojo.Student;
@@ -147,6 +148,67 @@ public class Client {
  					}
  				}
 			}
+			
+			
+			/** 
+			 * 
+			 * 
+			 * 
+			 * 
+			 */
+			//since the student client should not have the permission to delete a course from his course list. The only thing he can do is adding a new course to the list.
+			objectWriter.writeObject(new Message(31, new Student("jabigelow@ursinus.edu", null, null, 0, 0, 0, null)));
+			objectWriter.flush();
+			
+			System.out.println("let server to record user's id");
+			
+			objectWriter.writeObject(new Message(32, new Course("CS-170","Basic Introduction of programming")));
+			objectWriter.flush();
+			
+			System.out.println("sending the update courses");
+			
+			obj = objectReader.readObject();
+			if(obj!=null){
+ 				Message m = (Message) obj;
+ 				if(m.getTaskCode()==-1){
+ 					System.out.println("something goes wrong");
+ 				}else{
+ 					ArrayList<Course> ac = (ArrayList<Course>) m.getObject();
+ 					Iterator<Course> i = ac.iterator();
+ 					while(i.hasNext()){
+ 						System.out.println(i.next());
+ 					}
+ 				}
+			}
+			
+			/** 
+			 * 
+			 * 
+			 * 
+			 * 
+			 */
+			//test for user request activities 
+			//to test if user can get his course list
+			objectWriter.writeObject(new Message(4, new Student("jabigelow@ursinus.edu", null, null, 0, 0, 0, null)));
+			objectWriter.flush();
+			System.out.println("object has sent to server to test get activity list process");
+			
+			obj = objectReader.readObject();
+			if(obj!=null){
+ 				Message m = (Message) obj;
+ 				if(m.getTaskCode()==-1){
+ 					System.out.println("something goes wrong");
+ 				}else{
+ 					ArrayList<Activity> ac = (ArrayList<Activity>) m.getObject();
+ 					Iterator<Activity> i = ac.iterator();
+ 					while(i.hasNext()){
+ 						System.out.println(i.next());
+ 					}
+ 				}
+			}
+			
+			
+			
 			
 			//shutdown the connection from the client
 			objectWriter.writeObject(new Message(-2,null));
