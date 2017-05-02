@@ -62,6 +62,16 @@ public class Activity implements Serializable{
 	public void setActivityDescri(String activityDescri) {
 		this.activityDescri = activityDescri;
 	}
-	
+
+	/* (non Javadoc) 
+	* <p>Title: toString</p> 
+	* <p>Description: </p> 
+	* @return 
+	* @see java.lang.Object#toString() 
+	*/ 
+	@Override
+	public String toString() {
+		return "Activity [activityName=" + activityName + ", activityDescri=" + activityDescri + "]";
+	}
 }
 

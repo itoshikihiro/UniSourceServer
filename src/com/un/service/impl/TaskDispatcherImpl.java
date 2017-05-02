@@ -13,10 +13,12 @@ import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.ArrayList;
 
+import com.un.pojo.Activity;
 import com.un.pojo.Course;
 import com.un.pojo.Message;
 import com.un.pojo.Student;
 import com.un.pojo.User;
+import com.un.service.ActivitySvc;
 import com.un.service.CoursesSvc;
 import com.un.service.LoginSvc;
 import com.un.service.RegisterSvc;
@@ -38,6 +40,7 @@ public class TaskDispatcherImpl implements TaskDispatchSvc{
 	CoursesSvc courseService = null;
 	String userID = null;
 	int counter = 0;
+	ActivitySvc activityService = null;
 	
 	/** 
 	* <p>Description: Constructor </p>  
@@ -48,6 +51,7 @@ public class TaskDispatcherImpl implements TaskDispatchSvc{
 		this.objectWriter = objectWriter;
 		registerService = new RegisterSvcImpl();
 		courseService = new CourseSvcImpl();
+		activityService = new ActivitySvcImpl();
 	}
 	
 	/* (non Javadoc) 
@@ -84,7 +88,11 @@ public class TaskDispatcherImpl implements TaskDispatchSvc{
 						userID = null;
 					}
 					break;
+				case 4: 
+					requestAList(m);
+					break;
 				default:
+					returnErrorMes();
 					break;
 				}
 			}
@@ -180,6 +188,18 @@ public class TaskDispatcherImpl implements TaskDispatchSvc{
 		ArrayList<Course> ac = courseService.readCList(userID);
 		try {
 			returnMes(new Message(3,ac));
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			System.out.println("Error for sending object to client");
+		}
+	}
+	
+	public void requestAList(Message m)
+	{
+		Student s = (Student) m.getObject();
+		ArrayList<Activity> aa = activityService.readAList(s.getUserID());
+		try {
+			returnMes(new Message(4,aa));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			System.out.println("Error for sending object to client");
