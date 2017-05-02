@@ -11,9 +11,13 @@ package com.un.service.impl;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.util.ArrayList;
 
+import com.un.pojo.Course;
 import com.un.pojo.Message;
+import com.un.pojo.Student;
 import com.un.pojo.User;
+import com.un.service.CoursesSvc;
 import com.un.service.LoginSvc;
 import com.un.service.RegisterSvc;
 import com.un.service.TaskDispatchSvc;
@@ -31,6 +35,7 @@ public class TaskDispatcherImpl implements TaskDispatchSvc{
 	Socket client = null;
 	ObjectOutputStream objectWriter = null;
 	RegisterSvc registerService = null;
+	CoursesSvc courseService = null;
 	
 	/** 
 	* <p>Description: Constructor </p>  
@@ -40,6 +45,7 @@ public class TaskDispatcherImpl implements TaskDispatchSvc{
 		this.client = client;
 		this.objectWriter = objectWriter;
 		registerService = new RegisterSvcImpl();
+		courseService = new CourseSvcImpl();
 	}
 	
 	/* (non Javadoc) 
@@ -60,6 +66,9 @@ public class TaskDispatcherImpl implements TaskDispatchSvc{
 					break;
 				case 1:
 					requestRegister(m);
+					break;
+				case 2:
+					requestCList(m);
 					break;
 				default:
 					break;
@@ -128,5 +137,18 @@ public class TaskDispatcherImpl implements TaskDispatchSvc{
 		}
 	}
 	
+	
+	//use course service to get course list and return back to client
+	public void requestCList(Message m)
+	{
+		Student s = (Student) m.getObject();
+		ArrayList<Course> ac = courseService.readCList(s.getUserID());
+		try {
+			returnMes(new Message(3,ac));
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			System.out.println("Error for sending object to client");
+		}
+	}
 }
 

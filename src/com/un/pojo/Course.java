@@ -63,5 +63,20 @@ public class Course implements Serializable {
 		this.courseName = courseName;
 	}
 	
+	/* (non Javadoc)
+	
+	 * @Title: toString
+	
+	 * @Description: TODO
+	
+	 * @return
+	
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		return "Course [courseCode=" + courseCode + ", courseName="
+				+ courseName + "]";
+	}
 }
 
