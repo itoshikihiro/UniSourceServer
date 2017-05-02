@@ -12,7 +12,10 @@ import java.io.BufferedInputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.util.ArrayList;
+import java.util.Iterator;
 
+import com.un.pojo.Course;
 import com.un.pojo.Message;
 import com.un.pojo.Student;
 import com.un.pojo.User;
@@ -104,7 +107,7 @@ public class Client {
 			 */
 			//test new function for requestRegister
 			//the only thing we are asking is the email address
-			objectWriter.writeObject(new Message(1, "jilin@ursinus.edu"));
+			/*objectWriter.writeObject(new Message(1, "jilin@ursinus.edu"));
 			objectWriter.flush();
 			System.out.println("object has sent to server to test register process");
 			
@@ -116,6 +119,32 @@ public class Client {
  				}else{
  					String str = (String) m.getObject();
  					System.out.println(str);
+ 				}
+			}*/
+			
+			//When the user logs in, the client end should keep the userId and roleId while the user continue doing some actions
+			/** 
+			 * 
+			 * 
+			 * 
+			 * 
+			 */
+			//to test if user can get his course list
+			objectWriter.writeObject(new Message(2, new Student("jabigelow@ursinus.edu", null, null, 0, 0, 0, null)));
+			objectWriter.flush();
+			System.out.println("object has sent to server to test get course list process");
+			
+			obj = objectReader.readObject();
+			if(obj!=null){
+ 				Message m = (Message) obj;
+ 				if(m.getTaskCode()==-1){
+ 					System.out.println("something goes wrong");
+ 				}else{
+ 					ArrayList<Course> ac = (ArrayList<Course>) m.getObject();
+ 					Iterator<Course> i = ac.iterator();
+ 					while(i.hasNext()){
+ 						System.out.println(i.next());
+ 					}
  				}
 			}
 			
