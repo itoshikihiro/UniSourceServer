@@ -36,6 +36,8 @@ public class TaskDispatcherImpl implements TaskDispatchSvc{
 	ObjectOutputStream objectWriter = null;
 	RegisterSvc registerService = null;
 	CoursesSvc courseService = null;
+	String userID = null;
+	int counter = 0;
 	
 	/** 
 	* <p>Description: Constructor </p>  
@@ -69,6 +71,17 @@ public class TaskDispatcherImpl implements TaskDispatchSvc{
 					break;
 				case 2:
 					requestCList(m);
+					break;
+				case 3:
+					if(counter == 0)
+					{
+						recordUserID(m);
+						counter++;
+					}else
+					{
+						addNewCourse(m);
+						counter = 0;
+					}
 					break;
 				default:
 					break;
@@ -143,6 +156,27 @@ public class TaskDispatcherImpl implements TaskDispatchSvc{
 	{
 		Student s = (Student) m.getObject();
 		ArrayList<Course> ac = courseService.readCList(s.getUserID());
+		try {
+			returnMes(new Message(2,ac));
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			System.out.println("Error for sending object to client");
+		}
+	}
+	
+	//for adding a new course to the user course list, we need to record the user's ID at first
+	public void recordUserID(Message m)
+	{		
+		Student s = (Student)m.getObject();
+		this.userID = s.getUserID();
+	}
+	
+	public void addNewCourse(Message m)
+	{
+		Course c = (Course) m.getObject();
+		courseService.addCourse(userID, c);
+		//then return user's course list
+		ArrayList<Course> ac = courseService.readCList(userID);
 		try {
 			returnMes(new Message(3,ac));
 		} catch (IOException e) {

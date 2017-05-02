@@ -11,6 +11,7 @@ package com.un.service.impl;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -66,6 +67,22 @@ public class CourseSvcImpl implements CoursesSvc {
 		}
 		
 		return rev;
+	}
+	
+	public void addCourse(String userID, Course c)
+	{
+		try
+		{
+			//use this constructor means if there exists such file
+			//directly add more String at the end of this file
+			 FileWriter writer=new FileWriter(FILEADD+userID+"Courses"+SUFFIX,true);
+			 writer.write(c.getCourseCode()+","+c.getCourseName()+"\n");
+			 writer.close();
+		}
+		catch(IOException e)//if it catches any exception
+		{
+			System.out.println("Can not output as a file");
+		}
 	}
 
 }

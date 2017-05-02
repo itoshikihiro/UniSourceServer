@@ -21,5 +21,6 @@ import com.un.pojo.Course;
     */
 public interface CoursesSvc {
 	public ArrayList<Course> readCList(String userID);
+	public void addCourse(String userID, Course c);
 }
 
