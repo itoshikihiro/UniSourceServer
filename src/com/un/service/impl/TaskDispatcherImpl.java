@@ -81,6 +81,7 @@ public class TaskDispatcherImpl implements TaskDispatchSvc{
 					{
 						addNewCourse(m);
 						counter = 0;
+						userID = null;
 					}
 					break;
 				default:
