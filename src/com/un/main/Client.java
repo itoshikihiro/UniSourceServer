@@ -207,7 +207,93 @@ public class Client {
  				}
 			}
 			
+			/** 
+			 * 
+			 * 
+			 * 
+			 * 
+			 */
+			//test for user adds an activity
+			//to test if user can adds an activity
+			objectWriter.writeObject(new Message(50, new Student("jabigelow@ursinus.edu", null, null, 0, 0, 0, null)));
+			objectWriter.flush();
+			System.out.println("object has sent to server to let server to record the user id");
 			
+			//add a new activity
+			objectWriter.writeObject(new Message(51, new Activity("Intership2","A winter intership")));
+			objectWriter.flush();
+			System.out.println("object has sent to server to let server to test if it can add a new activity");
+			
+			obj = objectReader.readObject();
+			if(obj!=null){
+ 				Message m = (Message) obj;
+ 				if(m.getTaskCode()==-1){
+ 					System.out.println("something goes wrong");
+ 				}else{
+ 					ArrayList<Activity> ac = (ArrayList<Activity>) m.getObject();
+ 					Iterator<Activity> i = ac.iterator();
+ 					while(i.hasNext()){
+ 						System.out.println(i.next());
+ 					}
+ 				}
+			}
+			
+			/** 
+			 * 
+			 * 
+			 * 
+			 * 
+			 */
+			/*//test for user deltes an activity
+			//to test if user can delete an activity
+			objectWriter.writeObject(new Message(50, new Student("jabigelow@ursinus.edu", null, null, 0, 0, 0, null)));
+			objectWriter.flush();
+			System.out.println("object has sent to server to let server to record the user id");
+			
+			//delete an activity
+			objectWriter.writeObject(new Message(52, new Activity("Intership2","A winter intership")));
+			objectWriter.flush();
+			System.out.println("object has sent to server to let server to test if it can delete an existed activity");
+			
+			obj = objectReader.readObject();
+			if(obj!=null){
+ 				Message m = (Message) obj;
+ 				if(m.getTaskCode()==-1){
+ 					System.out.println("something goes wrong");
+ 				}else{
+ 					ArrayList<Activity> ac = (ArrayList<Activity>) m.getObject();
+ 					Iterator<Activity> i = ac.iterator();
+ 					while(i.hasNext()){
+ 						System.out.println(i.next());
+ 					}
+ 				}
+			}*/
+			
+			
+			//test for user updates an activity
+			//to test if user can update an activity
+			objectWriter.writeObject(new Message(50, new Student("jabigelow@ursinus.edu", null, null, 0, 0, 0, null)));
+			objectWriter.flush();
+			System.out.println("object has sent to server to let server to record the user id");
+			
+			//update an activity
+			objectWriter.writeObject(new Message(53, new Activity("Intership2","A winter intership (change)")));
+			objectWriter.flush();
+			System.out.println("object has sent to server to let server to test if it can update an existed activity");
+			
+			obj = objectReader.readObject();
+			if(obj!=null){
+ 				Message m = (Message) obj;
+ 				if(m.getTaskCode()==-1){
+ 					System.out.println("something goes wrong");
+ 				}else{
+ 					ArrayList<Activity> ac = (ArrayList<Activity>) m.getObject();
+ 					Iterator<Activity> i = ac.iterator();
+ 					while(i.hasNext()){
+ 						System.out.println(i.next());
+ 					}
+ 				}
+			}
 			
 			
 			//shutdown the connection from the client
