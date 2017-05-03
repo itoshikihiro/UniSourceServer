@@ -186,5 +186,27 @@ public class StuProfileSvcImpl implements StuProfileSvc {
 		}
 	}
 
+	/* (non Javadoc) 
+	* <p>Title: getStuProfile</p> 
+	* <p>Description: </p> 
+	* @param s
+	* @return 
+	* @see com.un.service.StuProfileSvc#getStuProfile(com.un.pojo.Student) 
+	*/ 
+	@Override
+	public Student getStuProfile(String s) {
+		UserListReader ulr = new UserListReader();
+		Student res = new Student();
+		ArrayList<Student> as = ulr.getStudentList();
+		for(int i = 0; i<as.size();i++)
+		{
+			if(as.get(i).getUserID().equals(s))
+			{
+				res = as.get(i);
+			}
+		}
+		return res;
+	}
+
 }
 

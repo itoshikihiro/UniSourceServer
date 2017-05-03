@@ -23,5 +23,6 @@ public interface StuProfileSvc {
 	public void addStuProfile(Student s);
 	public void deleteStuProfile(Student s)throws FileNotFoundException;
 	public void updateStuProfile(Student s)throws FileNotFoundException;
+	public Student getStuProfile(String s);
 }
 
