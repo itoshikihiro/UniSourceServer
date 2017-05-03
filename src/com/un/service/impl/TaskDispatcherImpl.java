@@ -8,6 +8,7 @@
     */  
 package com.un.service.impl;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
@@ -76,14 +77,27 @@ public class TaskDispatcherImpl implements TaskDispatchSvc{
 					requestCList(m);
 					break;
 				case 31:
+					userID = null;
 					recordUserID(m);
 					break;
 				case 32:
 					addNewCourse(m);
-					userID = null;
 					break;
 				case 4: 
 					requestAList(m);
+					break;
+				case 50:
+					userID = null;
+					recordUserID(m);
+					break;
+				case 51:
+					addNewActivity(m);
+					break;
+				case 52:
+					deleteActivity(m);
+					break;
+				case 53:
+					updateActivity(m);
 					break;
 				default:
 					returnErrorMes();
@@ -148,7 +162,6 @@ public class TaskDispatcherImpl implements TaskDispatchSvc{
 		try {
 			returnMes(new Message(1,"Your information has sent to one of admins, please check your email box recently. The admin will send you an email to confirm your information"));
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			System.out.println("Error for sending object to client");
 		}
 	}
@@ -162,7 +175,6 @@ public class TaskDispatcherImpl implements TaskDispatchSvc{
 		try {
 			returnMes(new Message(2,ac));
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			System.out.println("Error for sending object to client");
 		}
 	}
@@ -181,9 +193,8 @@ public class TaskDispatcherImpl implements TaskDispatchSvc{
 		//then return user's course list
 		ArrayList<Course> ac = courseService.readCList(userID);
 		try {
-			returnMes(new Message(3,ac));
+			returnMes(new Message(32,ac));
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			System.out.println("Error for sending object to client");
 		}
 	}
@@ -198,6 +209,38 @@ public class TaskDispatcherImpl implements TaskDispatchSvc{
 			// TODO Auto-generated catch block
 			System.out.println("Error for sending object to client");
 		}
+	}
+	
+	public void addNewActivity(Message m)
+	{
+		Activity a = (Activity) m.getObject();
+		activityService.addActivity(userID, a);
+		//then return user's course list
+		ArrayList<Activity> aa = activityService.readAList(userID);
+		try {
+			returnMes(new Message(51,aa));
+		} catch (IOException e) {
+			System.out.println("Error for sending object to client");
+		}
+	}
+	
+	public void deleteActivity(Message m) throws FileNotFoundException
+	{
+		Activity a = (Activity) m.getObject();
+		activityService.deleteActivity(userID, a);
+		//then return user's course list
+		ArrayList<Activity> aa = activityService.readAList(userID);
+		try {
+			returnMes(new Message(51,aa));
+		} catch (IOException e) {
+			System.out.println("Error for sending object to client");
+		}
+	}
+	
+	public void updateActivity(Message m) throws FileNotFoundException{
+		Activity a = (Activity) m.getObject();
+		activityService.deleteActivity(userID, a);
+		addNewActivity(m);
 	}
 }
 

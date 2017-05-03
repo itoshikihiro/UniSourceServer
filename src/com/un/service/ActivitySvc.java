@@ -8,6 +8,7 @@
     */  
 package com.un.service;
 
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 
 import com.un.pojo.Activity;
@@ -22,6 +23,6 @@ import com.un.pojo.Activity;
 public interface ActivitySvc {
 	public ArrayList<Activity> readAList(String userID);
 	public void addActivity(String userID, Activity a);
-	public void deleteActivity(String userID, Activity a);
+	public void deleteActivity(String userID, Activity a)throws FileNotFoundException;
 }
 
