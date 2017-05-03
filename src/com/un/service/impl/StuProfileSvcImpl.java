@@ -71,7 +71,7 @@ public class StuProfileSvcImpl implements StuProfileSvc {
 			}
 			if(s.getDescription().equals(null))
 			{
-				writer.write("\n");
+				writer.write(" \n");
 			}
 			else
 			{
@@ -172,7 +172,7 @@ public class StuProfileSvcImpl implements StuProfileSvc {
 				}
 				if(s.getDescription().equals(null))
 				{
-					writer.write("\n");
+					writer.write(" \n");
 				}
 				else
 				{

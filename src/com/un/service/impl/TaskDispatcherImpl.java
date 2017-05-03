@@ -13,6 +13,7 @@ import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.Iterator;
 
 import com.un.pojo.Activity;
 import com.un.pojo.Course;
@@ -23,7 +24,9 @@ import com.un.service.ActivitySvc;
 import com.un.service.CoursesSvc;
 import com.un.service.LoginSvc;
 import com.un.service.RegisterSvc;
+import com.un.service.StuProfileSvc;
 import com.un.service.TaskDispatchSvc;
+import com.un.tool.UserListReader;
 
 /** 
     * @ClassName: TaskDispatcherImpl 
@@ -41,6 +44,7 @@ public class TaskDispatcherImpl implements TaskDispatchSvc{
 	CoursesSvc courseService = null;
 	String userID = null;
 	ActivitySvc activityService = null;
+	StuProfileSvc stuProfileService = null;
 	
 	/** 
 	* <p>Description: Constructor </p>  
@@ -52,6 +56,7 @@ public class TaskDispatcherImpl implements TaskDispatchSvc{
 		registerService = new RegisterSvcImpl();
 		courseService = new CourseSvcImpl();
 		activityService = new ActivitySvcImpl();
+		stuProfileService = new StuProfileSvcImpl();
 	}
 	
 	/* (non Javadoc) 
@@ -98,6 +103,9 @@ public class TaskDispatcherImpl implements TaskDispatchSvc{
 					break;
 				case 53:
 					updateActivity(m);
+					break;
+				case 12:
+					updateStuPro(m);
 					break;
 				default:
 					returnErrorMes();
@@ -241,6 +249,22 @@ public class TaskDispatcherImpl implements TaskDispatchSvc{
 		Activity a = (Activity) m.getObject();
 		activityService.deleteActivity(userID, a);
 		addNewActivity(m);
+	}
+	
+	public void updateStuPro(Message m) throws IOException{
+		Student s =(Student) m.getObject();
+		stuProfileService.updateStuProfile(s);
+		UserListReader ulr = new UserListReader();
+		ArrayList<Student> as = ulr.getStudentList();
+		Iterator<Student> i = as.iterator();
+		while(i.hasNext())
+		{
+			Student tems = i.next();
+			if(tems.getUserID().equals(s.getUserID()))
+			{
+				returnMes(new Message(12,tems));
+			}
+		}
 	}
 }
 
