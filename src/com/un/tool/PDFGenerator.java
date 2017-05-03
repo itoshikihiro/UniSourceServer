@@ -142,8 +142,8 @@ public class PDFGenerator {
 			document.add(tHeader);
 
 			//record header field
-			Table t=new Table(4);
-			float[] widths={1.5f,1f,1f,1.5f};
+			Table t=new Table(2);
+			float[] widths={1.5f,1f};
 			t.setWidths(widths);
 			t.setWidth(100);
 			t.getDefaultCell().setBorder(PdfPCell.NO_BORDER);
@@ -151,19 +151,33 @@ public class PDFGenerator {
 			t.addCell(c1);
 			c1 = new Cell(new Paragraph("Course Name",keyfont));
 			t.addCell(c1);
+			
+			//calculate the real records within a page ,to calculate the last record number of every page
+			int maxRecordInPage= j+1 ==totalPage ? (remainPage==0?recordPerPage:(ponum.size()%recordPerPage)):recordPerPage;
+
+			for(int i=j*recordPerPage;i<((j*recordPerPage)+maxRecordInPage);i++){
+				Cell c2;
+				c2=new Cell(new Paragraph(ponum.get(i), textfont));
+				t.addCell(c2);
+				c2=new Cell(new Paragraph(line.get(i), textfont));
+				t.addCell(c2);
+			}
+			document.add(t);
+			
+			t=new Table(2);
+			t.setWidths(widths);
+			t.setWidth(100);
+			t.getDefaultCell().setBorder(PdfPCell.NO_BORDER);
 			c1 = new Cell(new Paragraph("Activity Name",keyfont));
 			t.addCell(c1);
 			c1 = new Cell(new Paragraph("Activity Description",keyfont));
 			t.addCell(c1); 
 
 			//calculate the real records within a page ,to calculate the last record number of every page
-			int maxRecordInPage= j+1 ==totalPage ? (remainPage==0?recordPerPage:(ponum.size()%recordPerPage)):recordPerPage;
+			maxRecordInPage= j+1 ==totalPage ? (remainPage==0?recordPerPage:(part.size()%recordPerPage)):recordPerPage;
 
 			for(int i=j*recordPerPage;i<((j*recordPerPage)+maxRecordInPage);i++){
-				Cell c2=new Cell(new Paragraph(ponum.get(i), textfont));
-				t.addCell(c2);
-				c2=new Cell(new Paragraph(line.get(i), textfont));
-				t.addCell(c2);
+				Cell c2;
 				c2=new Cell(new Paragraph(part.get(i), textfont));
 				t.addCell(c2);
 				c2=new Cell(new Paragraph(description.get(i), textfont));

@@ -1,13 +1,16 @@
-    /**   
-    * @Title: TaskDispatcherImpl.java 
-    * @Package com.un.service.impl 
-    * @Description: TODO 
-    * @author Jie Lin: kimihiro.lin80@gmail.com 
-    * @date Apr 12, 2017 12:41:30 PM 
-    * @version V1.0   
-    */  
+/**   
+ * @Title: TaskDispatcherImpl.java 
+ * @Package com.un.service.impl 
+ * @Description: TODO 
+ * @author Jie Lin: kimihiro.lin80@gmail.com 
+ * @date Apr 12, 2017 12:41:30 PM 
+ * @version V1.0   
+ */  
 package com.un.service.impl;
 
+import java.io.DataOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
@@ -15,6 +18,7 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Iterator;
 
+import com.lowagie.text.DocumentException;
 import com.un.pojo.Activity;
 import com.un.pojo.Course;
 import com.un.pojo.Message;
@@ -26,15 +30,16 @@ import com.un.service.LoginSvc;
 import com.un.service.RegisterSvc;
 import com.un.service.StuProfileSvc;
 import com.un.service.TaskDispatchSvc;
+import com.un.tool.PDFGenerator;
 import com.un.tool.UserListReader;
 
 /** 
-    * @ClassName: TaskDispatcherImpl 
-    * @Description: TODO
-    * @author Jie Lin: kimihiro.lin80@gmail.com
-    * @date Apr 12, 2017 12:41:30 PM 
-    *  
-    */
+ * @ClassName: TaskDispatcherImpl 
+ * @Description: TODO
+ * @author Jie Lin: kimihiro.lin80@gmail.com
+ * @date Apr 12, 2017 12:41:30 PM 
+ *  
+ */
 public class TaskDispatcherImpl implements TaskDispatchSvc{
 
 	LoginSvc loginService = null;
@@ -45,10 +50,10 @@ public class TaskDispatcherImpl implements TaskDispatchSvc{
 	String userID = null;
 	ActivitySvc activityService = null;
 	StuProfileSvc stuProfileService = null;
-	
+
 	/** 
-	* <p>Description: Constructor </p>  
-	*/
+	 * <p>Description: Constructor </p>  
+	 */
 	public TaskDispatcherImpl(Socket client, ObjectOutputStream objectWriter) {
 		loginService = new LoginSvcImpl();
 		this.client = client;
@@ -58,13 +63,13 @@ public class TaskDispatcherImpl implements TaskDispatchSvc{
 		activityService = new ActivitySvcImpl();
 		stuProfileService = new StuProfileSvcImpl();
 	}
-	
+
 	/* (non Javadoc) 
-	* <p>Title: dispath</p> 
-	* <p>Description: use message to determine which service it goes to</p> 
-	* @param m 
-	* @see com.un.service.TaskDispatchSvc#dispath(com.un.pojo.Message) 
-	*/ 
+	 * <p>Title: dispath</p> 
+	 * <p>Description: use message to determine which service it goes to</p> 
+	 * @param m 
+	 * @see com.un.service.TaskDispatchSvc#dispath(com.un.pojo.Message) 
+	 */ 
 	@Override
 	public void dispatch(Message m) {
 		try {
@@ -107,6 +112,12 @@ public class TaskDispatcherImpl implements TaskDispatchSvc{
 				case 12:
 					updateStuPro(m);
 					break;
+				case 81:
+					requestResume(m);
+					break;
+				case 82:
+					sendFile(m);
+					break;
 				default:
 					returnErrorMes();
 					break;
@@ -118,7 +129,7 @@ public class TaskDispatcherImpl implements TaskDispatchSvc{
 			returnErrorMes();
 		}
 	}
-	
+
 	public void loginCheck(Message m) throws IOException{
 		User u = (User)m.getObject();
 		//print the object we got from the client
@@ -140,15 +151,15 @@ public class TaskDispatcherImpl implements TaskDispatchSvc{
 			returnErrorMes();
 			break;
 		}
-		
+
 	}
-	
+
 	public void returnMes(Message m) throws IOException{
 		objectWriter.writeObject(m);
 		objectWriter.flush();
 	}
-	
-	
+
+
 	//for any error send code -1 with false to indicate there is no object in message
 	public void returnErrorMes(){
 		Message rem = new Message(-1,null);
@@ -159,7 +170,7 @@ public class TaskDispatcherImpl implements TaskDispatchSvc{
 			System.out.println("Error for sending object to client");
 		}
 	}
-	
+
 	//to invoke the register service's function
 	public void requestRegister(Message m)
 	{
@@ -173,8 +184,8 @@ public class TaskDispatcherImpl implements TaskDispatchSvc{
 			System.out.println("Error for sending object to client");
 		}
 	}
-	
-	
+
+
 	//use course service to get course list and return back to client
 	public void requestCList(Message m)
 	{
@@ -186,14 +197,14 @@ public class TaskDispatcherImpl implements TaskDispatchSvc{
 			System.out.println("Error for sending object to client");
 		}
 	}
-	
+
 	//for adding a new course to the user course list, we need to record the user's ID at first
 	public void recordUserID(Message m)
 	{		
 		Student s = (Student)m.getObject();
 		this.userID = s.getUserID();
 	}
-	
+
 	public void addNewCourse(Message m)
 	{
 		Course c = (Course) m.getObject();
@@ -206,7 +217,7 @@ public class TaskDispatcherImpl implements TaskDispatchSvc{
 			System.out.println("Error for sending object to client");
 		}
 	}
-	
+
 	public void requestAList(Message m)
 	{
 		Student s = (Student) m.getObject();
@@ -218,7 +229,7 @@ public class TaskDispatcherImpl implements TaskDispatchSvc{
 			System.out.println("Error for sending object to client");
 		}
 	}
-	
+
 	public void addNewActivity(Message m)
 	{
 		Activity a = (Activity) m.getObject();
@@ -231,7 +242,7 @@ public class TaskDispatcherImpl implements TaskDispatchSvc{
 			System.out.println("Error for sending object to client");
 		}
 	}
-	
+
 	public void deleteActivity(Message m) throws FileNotFoundException
 	{
 		Activity a = (Activity) m.getObject();
@@ -244,13 +255,13 @@ public class TaskDispatcherImpl implements TaskDispatchSvc{
 			System.out.println("Error for sending object to client");
 		}
 	}
-	
+
 	public void updateActivity(Message m) throws FileNotFoundException{
 		Activity a = (Activity) m.getObject();
 		activityService.deleteActivity(userID, a);
 		addNewActivity(m);
 	}
-	
+
 	public void updateStuPro(Message m) throws IOException{
 		Student s =(Student) m.getObject();
 		stuProfileService.updateStuProfile(s);
@@ -264,6 +275,43 @@ public class TaskDispatcherImpl implements TaskDispatchSvc{
 			{
 				returnMes(new Message(12,tems));
 			}
+		}
+	}
+
+	public void requestResume(Message m) throws DocumentException, IOException
+	{
+		Student s = (Student) m.getObject();
+		PDFGenerator.generate(s.getUserID());
+	}
+
+	public void sendFile(Message m) throws IOException
+	{
+		FileInputStream fis=null;
+		DataOutputStream dos=null;
+		Student s = (Student) m.getObject();
+		File file = new File("./Content/files/"+s.getUserID()+"Resume.pdf");
+		try{
+			fis = new FileInputStream(file);
+			dos = new DataOutputStream(client.getOutputStream());
+
+			dos.writeUTF(file.getName());
+			dos.flush();
+			dos.writeLong(file.length());
+			dos.flush();
+
+			byte[] sendBytes = new byte[1024];
+			int length = 0;
+			while((length = fis.read(sendBytes, 0, sendBytes.length)) > 0){
+				dos.write(sendBytes, 0, length);
+				dos.flush();
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}finally{
+			if(fis != null)
+				fis.close();
+			if(dos != null)
+				dos.close();
 		}
 	}
 }
