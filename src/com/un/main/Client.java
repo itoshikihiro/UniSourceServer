@@ -213,7 +213,7 @@ public class Client {
 			 * 
 			 * 
 			 */
-			//test for user adds an activity
+			/*//test for user adds an activity
 			//to test if user can adds an activity
 			objectWriter.writeObject(new Message(50, new Student("jabigelow@ursinus.edu", null, null, 0, 0, 0, null)));
 			objectWriter.flush();
@@ -236,7 +236,7 @@ public class Client {
  						System.out.println(i.next());
  					}
  				}
-			}
+			}*/
 			
 			/** 
 			 * 
@@ -270,7 +270,7 @@ public class Client {
 			}*/
 			
 			
-			//test for user updates an activity
+			/*//test for user updates an activity
 			//to test if user can update an activity
 			objectWriter.writeObject(new Message(50, new Student("jabigelow@ursinus.edu", null, null, 0, 0, 0, null)));
 			objectWriter.flush();
@@ -292,6 +292,23 @@ public class Client {
  					while(i.hasNext()){
  						System.out.println(i.next());
  					}
+ 				}
+			}*/
+			
+			
+			//update an profile
+			objectWriter.writeObject(new Message(12, new Student("dakritz@ursinus.edu","Danielle", "a9876543210", 1, 2017, 21, "A senior student")));
+			objectWriter.flush();
+			System.out.println("object has sent to server to let server to test if it can update an existed profile");
+			
+			obj = objectReader.readObject();
+			if(obj!=null){
+ 				Message m = (Message) obj;
+ 				if(m.getTaskCode()==-1){
+ 					System.out.println("something goes wrong");
+ 				}else{
+ 					Student s =(Student) m.getObject();
+ 					System.out.println(s);
  				}
 			}
 			
