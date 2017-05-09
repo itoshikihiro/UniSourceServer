@@ -205,6 +205,7 @@ public class TaskDispatcherImpl implements TaskDispatchSvc{
 		this.userID = s.getUserID();
 	}
 
+	//clients can add a new course, but not change any course information 
 	public void addNewCourse(Message m)
 	{
 		Course c = (Course) m.getObject();
@@ -218,6 +219,7 @@ public class TaskDispatcherImpl implements TaskDispatchSvc{
 		}
 	}
 
+	//send client's activity list to client side
 	public void requestAList(Message m)
 	{
 		Student s = (Student) m.getObject();
@@ -230,6 +232,7 @@ public class TaskDispatcherImpl implements TaskDispatchSvc{
 		}
 	}
 
+	//add a new activity
 	public void addNewActivity(Message m)
 	{
 		Activity a = (Activity) m.getObject();
@@ -243,6 +246,7 @@ public class TaskDispatcherImpl implements TaskDispatchSvc{
 		}
 	}
 
+	//client can delete activity
 	public void deleteActivity(Message m) throws FileNotFoundException
 	{
 		Activity a = (Activity) m.getObject();
@@ -255,13 +259,16 @@ public class TaskDispatcherImpl implements TaskDispatchSvc{
 			System.out.println("Error for sending object to client");
 		}
 	}
-
+	
+	//for student to update their activities
 	public void updateActivity(Message m) throws FileNotFoundException{
 		Activity a = (Activity) m.getObject();
 		activityService.deleteActivity(userID, a);
 		addNewActivity(m);
 	}
-
+	
+	//a function to update student's information, but for client, they are not allowed
+	//to change userID
 	public void updateStuPro(Message m) throws IOException{
 		Student s =(Student) m.getObject();
 		stuProfileService.updateStuProfile(s);
@@ -277,13 +284,16 @@ public class TaskDispatcherImpl implements TaskDispatchSvc{
 			}
 		}
 	}
-
+	
+	//It generates sutdent's resume and store in the server. 
 	public void requestResume(Message m) throws DocumentException, IOException
 	{
 		Student s = (Student) m.getObject();
 		PDFGenerator.generate(s.getUserID());
 	}
 
+	
+	//send file to buffer that client can receive it
 	public void sendFile(Message m) throws IOException
 	{
 		FileInputStream fis=null;
